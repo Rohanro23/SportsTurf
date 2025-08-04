@@ -1,0 +1,70 @@
+.landing-container {
+  height: 100vh;
+  width: 100%;
+  background: #f2f4f7;
+
+  .welcome-space {
+    background-color: orangered;
+    /* height: 8vh; */
+    display: flex;
+    justify-content: space-between;
+    padding: 13px;
+    .name {
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+    }
+  }
+  .form-box {
+    width: 30%;
+    background-color: white;
+    padding: 15px;
+    margin: 5% auto;
+    border-radius: 8px;
+
+    .subscription-box {
+      margin-top: 20px;
+      display: flex;
+    }
+
+    .sports-name {
+      height: 4vh;
+      width: 67%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .submit-btn {
+      display: flex;
+      justify-content: end;
+      margin: 10px 0;
+      .submit-click {
+        padding: 4px 10px;
+        border: 1px solid lightgray;
+      }
+    }
+
+    .interested-sports {
+      font-style: inherit;
+      font-weight: 500;
+    }
+  }
+  .sport-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .sport-heading {
+    padding-bottom: 22px;
+    font-size: 27px;
+    /* font-style: italic; */
+    font-weight: 600;
+    font-family: system-ui;
+  }
+  .logout-btn {
+    background: blue;
+    color: white;
+    padding: 8px 11px !important;
+  }
+  .form-list {
+    padding: 10px;
+  }
+}

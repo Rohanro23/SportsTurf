@@ -1,0 +1,36 @@
+.Log-in {
+  width: 40%;
+  background-color: white;
+  margin: 5% auto;
+  border-radius: 8px;
+  padding: 3px 0px;
+
+  .my-input {
+    display: flex;
+    justify-content: center;
+    margin: 8% 0%;
+  }
+
+  .title-1 {
+    display: flex;
+    justify-content: center;
+  }
+
+  .password {
+    width: 50%;
+    height: 5vh;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 0px 10px;
+  }
+  .confirm-pwd {
+    display: flex;
+    justify-content: center;
+    margin: 8% 0%;
+  }
+
+  .Click-Button {
+    background: blue;
+    color: white;
+  }
+}
