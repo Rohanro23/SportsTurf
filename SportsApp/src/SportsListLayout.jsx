@@ -55,7 +55,7 @@ const SportsListLayout = ({ sportsData }) => {
       .then((a) => {
         fetchSubscribedList();
         setsubscriptionMessage(
-          `You have Subscribed to the sport ${selectedSport} Successfully`
+          `You have Subscribed to the sport ${selectedSport} Successfully.`
         );
         setShowSubscriptionSection(true);
         setShowModal(false);
