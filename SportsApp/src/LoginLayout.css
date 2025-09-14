@@ -8,7 +8,7 @@
   .my-input {
     display: flex;
     justify-content: center;
-    margin: 8% 0%;
+    margin: 8% 0% 2%;
   }
 
   .title-1 {
@@ -30,6 +30,12 @@
   }
 
   .Click-Button {
-    color: white;
+    color: blue;
+  }
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    text-align: center;
   }
 }

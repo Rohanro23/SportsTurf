@@ -5,18 +5,22 @@
     width: 100%;
     flex-wrap: wrap;
     padding-top: 10px;
-    justify-content: center;
+    justify-content: start;
   }
   .sport-heading {
     font-style: oblique;
+    padding-left: 7px;
   }
 
   .list-sports {
-    width: 20%;
-    margin: 8px;
-    text-align: center;
+    width: 11%;
+    margin: 5px;
     font-weight: bold;
     cursor: pointer;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 15px;
   }
   .Modal-box {
     width: 20%;
@@ -30,6 +34,7 @@
   .btn-show {
     width: 12%;
     margin: 2% auto;
+    color: red;
   }
   .modal-overlay {
     position: fixed;
@@ -95,5 +100,15 @@
   }
   .subscribed-games {
     padding: 0px 10px;
+  }
+  .unsubscribe-btn {
+    margin-left: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 13px;
   }
 }

@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage } from "./LandingPage";
-import { AuthContainer } from "./authContainer";
+import { AuthContainer } from "./AuthContainer";
 
 const App = () => {
   return (
