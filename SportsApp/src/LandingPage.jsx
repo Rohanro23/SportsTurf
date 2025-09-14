@@ -6,18 +6,16 @@ import SportsListLayout from "./SportsListLayout";
 
 export const LandingPage = () => {
   const [SportList, setSportlist] = useState([]);
-  const [newSport, setNewSport] = useState("");
-  const [needsSubscription, setNeedsSubscription] = useState("");
 
   const userData = useSelector((state) => state.user);
 
   const getsportlist = useCallback(() => {
     Promise.all([
-      axios.get("http://localhost:3000/api/profile"),
       axios.get("http://localhost:3000/api/sportsList"),
+      // axios.get("http://localhost:3000/api/profile"),
     ])
-      .then(([a, b]) => {
-        setSportlist(b.data);
+      .then(([a]) => {
+        setSportlist(a?.data);
       })
       .catch((err) => {
         console.log("error", err);
@@ -41,9 +39,12 @@ export const LandingPage = () => {
             <div className="">
               <button
                 className="logout-btn"
-                //onClick={}
+                // onClick={}
               >
-                Profile
+                {userData.newuserName
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </button>
             </div>
           </div>
@@ -51,7 +52,7 @@ export const LandingPage = () => {
           <SportsListLayout sportsData={SportList} />
         </div>
       ) : (
-        "You need to authenticate"
+        "You need to authenticate. Please login."
       )}
     </>
   );

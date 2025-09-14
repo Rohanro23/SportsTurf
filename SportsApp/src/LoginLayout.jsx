@@ -1,17 +1,20 @@
 import "./LoginLayout.css";
 import axios from "axios";
 import { useEffect, useState, memo } from "react";
-import { LandingPage } from "./LandingPage";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userLoggedIn, userName, newuserName } from "./Redux/userSlice";
 
-const LoginLayout = ({ componentName }) => {
+const LoginLayout = ({ componentName, onSuccessfullSignUp, messageFlag }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [layoutName, setLayoutName] = useState("");
   const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [messageSignup, setMessageSignup] = useState("");
+  const [signupErrorMessage, setsignupErrorMessage] = useState("");
+  const [loginErrorMsg, setLoginErrorMsg] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,63 +23,105 @@ const LoginLayout = ({ componentName }) => {
     setLayoutName(componentName);
   }, [componentName]);
 
-  const ClickHandler = (a) => {
-    axios
-      .post("http://localhost:3000/api/login", {
-        username,
-        password,
-      })
-      .then((r) => {
-        console.log("r", r);
+  const ClickHandler = () => {
+    if (layoutName === "login") {
+      axios
+        .post("http://localhost:3000/api/login", {
+          email: username,
+          password,
+        })
+        .then((r) => {
+          setLoginErrorMsg("");
 
-        if (r.data.isLogin) {
-          const logindata = r.data.token;
+          if (r.data.isLogin) {
+            const logindata = r.data.token;
 
-          const payload = logindata.split(".")[1];
-          const payloadData = JSON.parse(atob(payload));
+            const payload = logindata.split(".")[1];
+            const payloadData = JSON.parse(atob(payload));
 
-          localStorage.setItem("token", logindata);
-          dispatch(userName(payloadData.name));
-          dispatch(newuserName(payloadData.name));
+            localStorage.setItem("token", logindata);
+            dispatch(userName(payloadData.name));
+            dispatch(newuserName(payloadData.name));
 
-          navigate("/landing");
-        } else {
-          setLayoutName("signup");
-        }
-        dispatch(userLoggedIn(r.data.isLogin));
-      })
-      .catch((error) => {
-        console.log("err", error);
-      });
+            navigate("/landing");
+            setsignupErrorMessage("");
+          }
+          dispatch(userLoggedIn(r.data.isLogin));
+        })
+        .catch((error) => {
+          setLoginErrorMsg(error.response.data.error);
+          console.log("err", error);
+        });
+    } else if (layoutName === "signup") {
+      if (password !== confirmPassword) {
+        return;
+      }
+
+      axios
+        .post("http://localhost:3000/api/signup", {
+          email: username,
+          password,
+          isSignup: true,
+        })
+        .then((r) => {
+          console.log("www", r);
+          setsignupErrorMessage("");
+          setMessageSignup("You have been succefully registered");
+          setTimeout(() => {
+            setMessageSignup("");
+          }, 6000);
+          onSuccessfullSignUp(true);
+        })
+        .catch((error) => {
+          console.log("err", error);
+          setMessageSignup("");
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setsignupErrorMessage(error.response.data.error);
+          } else {
+            setsignupErrorMessage("Something went wrong ,Please try again");
+          }
+          setTimeout(() => {
+            setsignupErrorMessage("");
+          }, 6000);
+        });
+    }
   };
+
   const passwordRegex =
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/;
 
   const changeHandlerPassword = (e) => {
     setPassword(e.target.value);
+    setLoginErrorMsg("");
     if (!e.target.value) {
-      setPasswordError("password is required");
+      setPasswordError(true);
     } else if (!passwordRegex.test(e.target.value)) {
-      setPasswordError(
-        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character"
-      );
+      setPasswordError(true);
     } else {
-      setPasswordError("");
+      setPasswordError(false);
     }
   };
 
   const emailRegex = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
   const changeHandlerUser = (b) => {
-    console.log("userchange", b.target.value); //r
     setUsername(b.target.value);
+    setUsernameError("");
+    setLoginErrorMsg("");
+    if (b.target.value.length > 0) {
+    }
+  };
 
-    if (!b.target.value) {
-      setUsernameError("NO email typed");
-    } else if (!emailRegex.test(b.target.value)) {
-      setUsernameError("Username format incorrect");
-    } else {
-      setUsernameError("");
+  const userNameBlurHandler = (b) => {
+    if (b.target.value.length > 0) {
+      const emailVerify = emailRegex.test(b.target.value);
+      if (!emailVerify) {
+        setUsernameError("Please enter a valid email address");
+      }
     }
   };
 
@@ -100,10 +145,15 @@ const LoginLayout = ({ componentName }) => {
           name="email"
           placeholder="Email"
           value={username}
+          onBlur={userNameBlurHandler}
           onChange={changeHandlerUser}
         />
       </div>
-      <div>{usernameError.length > 0 && <p>{usernameError}</p>}</div>
+      <div>
+        {usernameError.length > 0 && (
+          <p className="error-message">{usernameError}</p>
+        )}
+      </div>
 
       <div className="my-input">
         <input
@@ -115,18 +165,32 @@ const LoginLayout = ({ componentName }) => {
           onChange={changeHandlerPassword}
         />
       </div>
-      <div> {passwordError && <p> {passwordError}</p>}</div>
+      <div>
+        {" "}
+        {passwordError && (
+          <div className="error-message">
+            <div>* Password must be at least 8 characters</div>
+            <div>* Include at least one uppercase</div>
+            <div>* Include at least one lowercase</div>
+            <div>* Include at least one number</div>
+            <div>* Include at least one special character</div>
+          </div>
+        )}
+      </div>
       {layoutName === "signup" && (
         <div className="confirm-pwd">
           <input
             className="password password-color"
+            // type="password"
             type="text"
             name="confirmpassword"
             placeholder="Confirm password"
-            onChange={changeHandlerPassword}
+            value={confirmPassword}
+            onChange={(e) => setconfirmPassword(e.target.value)}
           />
         </div>
       )}
+
       <div className="my-input">
         <button
           className="Click-Button"
@@ -136,6 +200,24 @@ const LoginLayout = ({ componentName }) => {
           {layoutName === "login" ? "Login" : "sign Up"}
         </button>
       </div>
+      {layoutName === "login" && loginErrorMsg && (
+        <div className="error-message">{loginErrorMsg}</div>
+      )}
+      {layoutName === "signup" && (
+        <>
+          {signupErrorMessage ? (
+            <div className="error-message">{signupErrorMessage}</div>
+          ) : (
+            messageFlag &&
+            messageSignup && (
+              <div className="error-message">{messageSignup}</div>
+            )
+          )}
+        </>
+      )}
+      {confirmPassword && confirmPassword !== password && (
+        <div className="error-message"> Passwords do not match </div>
+      )}
     </div>
   );
 };

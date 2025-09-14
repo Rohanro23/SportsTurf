@@ -3,9 +3,8 @@ import LoginLayout from "./LoginLayout";
 import { useDispatch, useSelector } from "react-redux";
 
 export const AuthContainer = () => {
-  const dispatch = useDispatch();
-
   const [authFlag, setAuthFlag] = useState(true);
+  const [MessageFlag, setMessageFlag] = useState(true);
   const userData = useSelector((state) => state.user);
 
   return (
@@ -14,7 +13,11 @@ export const AuthContainer = () => {
       {authFlag ? (
         <LoginLayout componentName="login" />
       ) : (
-        <LoginLayout componentName="signup" />
+        <LoginLayout
+          componentName="signup"
+          messageFlag={MessageFlag}
+          onSuccessfullSignUp={() => setAuthFlag(true)}
+        />
       )}
 
       <div className="non-login-section">
@@ -33,7 +36,13 @@ export const AuthContainer = () => {
             </a>
           </>
         ) : (
-          <div className="sign-up" onClick={() => setAuthFlag(true)}>
+          <div
+            className="sign-up"
+            onClick={() => {
+              setAuthFlag(true);
+              setMessageFlag(false);
+            }}
+          >
             Already have an account? <span className="text"> Login here</span>
           </div>
         )}

@@ -2,6 +2,7 @@
   height: 100vh;
   width: 100%;
   background: #f2f4f7;
+  padding: 10px;
 
   .welcome-space {
     background-color: orangered;
@@ -63,6 +64,7 @@
     background: blue;
     color: white;
     padding: 8px 11px !important;
+    border-radius: 50%;
   }
   .form-list {
     padding: 10px;
