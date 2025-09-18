@@ -21,6 +21,7 @@ const LoginLayout = ({ componentName, onSuccessfullSignUp, messageFlag }) => {
 
   useEffect(() => {
     setLayoutName(componentName);
+    setLoginErrorMsg("");
   }, [componentName]);
 
   const ClickHandler = () => {
